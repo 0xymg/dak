@@ -3,7 +3,8 @@ import thumbnail from "../assets/images/thumbnail.png";
 import cards from "../assets/images/cards.png";
 import path from "../assets/images/path.png";
 import logo from "../assets/images/logo.png";
-import logoSmall from "../assets/images/logo-small.png";
+import logoSm from "../assets/images/logoSm.png";
+import logoXs from "../assets/images/logoXs.png";
 import empty from "../assets/images/empty.png";
 
-export default { profile, thumbnail, cards, path, logo, logoSmall, empty };
+export default { profile, thumbnail, cards, path, logo, empty, logoSm, logoXs };
