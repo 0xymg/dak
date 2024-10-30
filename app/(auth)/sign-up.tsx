@@ -1,24 +1,38 @@
-import { ScrollView, StyleSheet, Text, View, Image } from 'react-native'
+import { ScrollView, StyleSheet, Text, View, Image, Alert } from 'react-native'
 import React, { useState } from 'react'
 import { SafeAreaView } from 'react-native-safe-area-context'
 import images from '@/constants/images'
 import FormField from '@/components/FormField'
 import CustomButton from '@/components/CustomButton'
-import { Link } from 'expo-router'
-import {createUser} from '@/lib/appwrite'
+import { Link, router } from 'expo-router'
+import { createUser } from '@/lib/appwrite'
 
 const SignUp = () => {
   const [form, setForm] = useState({
     name: '',
-    surname: '',
     email: '',
     password: ''
   })
   const [isSubmitting, setIsSubmitting] = useState(false)
 
-  const submit = () => {
-    createUser();
-   }
+  const submit = async () => {
+    if (!form.email || !form.password || !form.name) {
+      Alert.alert('Hata', 'Lutfen tum alanlari doldurun')
+    }
+
+    setIsSubmitting(true);
+
+    try {
+      const result = await createUser(form.email, form.password, form.name);
+      router.replace("/home")
+    } catch (error) {
+      Alert.alert('Hata', 'Giris yapilamadi');
+    } finally {
+      setIsSubmitting(false);
+    }
+
+ 
+  }
 
 
   return (
@@ -29,8 +43,8 @@ const SignUp = () => {
           <Text className='text-2xl text-white font-psemibold'>Kayit Ol</Text>
           <FormField
             title="Adiniz"
-            value={form.email}
-            handleChangeForm={(e: any) => setForm({ ...form, email: e })}
+            value={form.name}
+            handleChangeForm={(e: any) => setForm({ ...form, name: e })}
             otherStyles="mt-7"
             keyboardType="name"
             placeholder="Adiniz"
@@ -49,12 +63,12 @@ const SignUp = () => {
             value={form.password}
             handleChangeForm={(e: any) => setForm({ ...form, password: e })}
             otherStyles="mt-7"
-            keyboardType="email-address"
+            keyboardType="pass"
             placeholder="Parola"
           />
 
           <CustomButton
-            title="Giris Yap"
+            title="Kayit ol"
             handlePress={submit}
             containerStyles="mt-7"
             isLoading={isSubmitting}
@@ -63,7 +77,7 @@ const SignUp = () => {
 
           <View className='justify-center pt-5 flex-row gap-2'>
             <Text className='text-white text-lg font-pregular'>Hesabiniz var mi?</Text>
-            <Link className='text-secondary font-pregular text-lg' href='/sign-in'>Giris Yap</Link>
+            <Link className='text-secondary font-pregular text-lg' href='/sign-in'>Giris yap</Link>
           </View>
 
         </View>
